@@ -72,6 +72,7 @@ class DatabaseHelper{
 
     //inserting tasks/notes in database
     Future<int> insertTask(Task task) async{
+        print('insertTask called...');
         Database db = await this.db;
         final int result = await db.insert(tasksTable, task.toMap());
         return result;

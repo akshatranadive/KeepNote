@@ -73,24 +73,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   _submit(){
+    print('submit called...');
         if(_formKey.currentState.validate()){
           _formKey.currentState.save();
 
           print('$_title, $_date, $_content');
 
           Task task = Task(title: _title, date: _date, content: _content);
-          // if(task==null){
-          //   task.status = 0;
-          // }
-          // else{
-          //   task.status = widget.task.status;
-          //   DatabaseHelper.instance.updateTask(task);
-          // }
+          if(widget.task==null){
+            DatabaseHelper.instance.insertTask(task);
+          }
+          else{
+            print('else wala called');
+            task.id = widget.task.id;
+            DatabaseHelper.instance.updateTask(task);
+          }
 
 
           // print('$itemcount');
           // ignore: unnecessary_statements
-          widget.updateTaskList;
+          widget.updateTaskList();
           Navigator.pop(context);
         }
 
@@ -125,7 +127,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
                 SizedBox(height: 20.0,),
 
-                Text("Add Note",
+                Text(
+                  widget.task == null ? "Add Note" : "Update Note",
                   style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, fontSize: 30,),),
                   SizedBox(height: 10.0,),
                 Form(
@@ -212,7 +215,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         ),
                         child: FlatButton(
                           child: Text(
-                            'Add',
+                            widget.task == null ? "Add" : "Update",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0
